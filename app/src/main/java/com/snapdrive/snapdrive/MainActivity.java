@@ -1,7 +1,7 @@
 package com.snapdrive.snapdrive;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -12,6 +12,28 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        /*toggle = (ToggleButton)findViewById(R.id.speechToggle);
+        smsText = (TextView)findViewById(R.id.sms_text);
+        smsSender = (TextView)findViewById(R.id.sms_sender);
+
+        toggleListener = new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton view, boolean isChecked) {
+                if(isChecked){
+                    speaker.allow(true);
+                    speaker.speak(getString(R.string.start_speaking));
+                }else{
+                    speaker.speak(getString(R.string.stop_speaking));
+                    speaker.allow(false);
+                }
+            }
+        };
+        toggle.setOnCheckedChangeListener(toggleListener);*/
+
+        /*checkTTS();
+        initializeSMSReceiver();
+        registerSMSReceiver();*/
     }
 
 
@@ -36,4 +58,6 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }

@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">SnapDrive</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="sms_label">Latest SMS</string>
+    <string name="none">None</string>
+    <string name="speech_toggle_on">START SPEAKING</string>
+    <string name="speech_toggle_off">STOP SPEAKING</string>
+
+    <string name="start_speaking">Okay! Je vais lire vos messages à partir de maintenant.</string>
+    <string name="stop_speaking">Okay! On passe en mode silence.</string>
 </resources>
