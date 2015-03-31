@@ -37,7 +37,7 @@ public class Sms_s {
     }
 
     public void set_message(String message) {
-        _message = _message;
+        _message = message;
     }
 
     public String getContactName(){
