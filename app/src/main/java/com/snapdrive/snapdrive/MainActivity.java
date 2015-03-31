@@ -10,19 +10,24 @@ import android.widget.ToggleButton;
 
 
 public class MainActivity extends ActionBarActivity {
+    AppPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //ToggleButton toggle = (ToggleButton)findViewById(R.id.speechToggle);
+        ToggleButton toggle = (ToggleButton)findViewById(R.id.speechToggle);
         //smsText = (TextView)findViewById(R.id.sms_text);
         //smsSender = (TextView)findViewById(R.id.sms_sender);
+        prefs = new AppPreferences(this);
+        toggle.setChecked(prefs.isActivate());
 
-        /*CompoundButton.OnCheckedChangeListener toggleListener = new CompoundButton.OnCheckedChangeListener() {
+        CompoundButton.OnCheckedChangeListener toggleListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton view, boolean isChecked) {
+                prefs.activate(isChecked);
+                /*
                 if(isChecked){
                     //speaker.allow(true);
                     //speaker.speak(getString(R.string.start_speaking));
@@ -34,10 +39,10 @@ public class MainActivity extends ActionBarActivity {
                 }else{
                     //speaker.speak(getString(R.string.stop_speaking));
                     //speaker.allow(false);
-                }
+                }*/
             }
         };
-        toggle.setOnCheckedChangeListener(toggleListener);*/
+        toggle.setOnCheckedChangeListener(toggleListener);
 
         /*checkTTS();
         initializeSMSReceiver();
@@ -66,6 +71,5 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 
 }

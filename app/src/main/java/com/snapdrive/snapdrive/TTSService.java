@@ -54,7 +54,7 @@ public class TTSService extends Service implements TextToSpeech.OnInitListener{
 
         sender = intent.getExtras().getString("Sender");
         message = intent.getExtras().getString("Message");
-        say("Message reçu de "+sender);
+        say(getResources().getString(R.string.sms_received)+sender);
         mTts.playSilence(1500, TextToSpeech.QUEUE_ADD,null);
         say(message);
 
@@ -71,7 +71,7 @@ public class TTSService extends Service implements TextToSpeech.OnInitListener{
                     result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Log.v(TAG, "Language is not available.");
             } else {
-                say("Message reçu de "+sender);
+                say(getResources().getString(R.string.sms_received)+sender);
                 mTts.playSilence(1500, TextToSpeech.QUEUE_ADD,null);
                 say(message);
 

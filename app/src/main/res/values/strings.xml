@@ -10,4 +10,5 @@
 
     <string name="start_speaking">Okay! Je vais lire vos messages à partir de maintenant.</string>
     <string name="stop_speaking">Okay! On passe en mode silence.</string>
+    <string name="sms_received">Message reçu de</string>
 </resources>

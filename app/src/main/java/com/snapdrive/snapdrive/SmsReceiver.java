@@ -18,10 +18,13 @@ public class SmsReceiver extends BroadcastReceiver{
 
         SmsApi api = new SmsApi(context);
         Sms_s sms = api.getLastSms(intent);
-        Intent i = new Intent(context,TTSService.class);
-        Toast.makeText(context,"message: "+sms.get_message(),Toast.LENGTH_SHORT).show();
-        i.putExtra("Message",sms.get_message());
-        i.putExtra("Sender",sms.getContactName());
-        context.startService(i);
+        AppPreferences prefs = new AppPreferences(context);
+        if(prefs.isActivate()) {
+            Intent i = new Intent(context, TTSService.class);
+            Toast.makeText(context, "message: " + sms.get_message(), Toast.LENGTH_SHORT).show();
+            i.putExtra("Message", sms.get_message());
+            i.putExtra("Sender", sms.getContactName());
+            context.startService(i);
+        }
     }
 }
