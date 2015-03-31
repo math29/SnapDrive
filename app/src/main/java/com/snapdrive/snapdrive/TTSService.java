@@ -42,7 +42,6 @@ public class TTSService extends Service implements TextToSpeech.OnInitListener{
 
     @Override
     public void onDestroy() {
-        // TODO Auto-generated method stub
         if (mTts != null) {
             mTts.stop();
             mTts.shutdown();
