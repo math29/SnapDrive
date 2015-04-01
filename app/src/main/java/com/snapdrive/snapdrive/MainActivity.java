@@ -1,6 +1,5 @@
 package com.snapdrive.snapdrive;
 
-import android.content.res.Configuration;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
@@ -37,32 +36,23 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mCamera = cam.getCameraInstance(this);
-
-        Camera.CameraInfo info = new Camera.CameraInfo();
-        Camera.getCameraInfo(Camera.CameraInfo.CAMERA_FACING_BACK, info);
-        int rotation = this.getWindowManager().getDefaultDisplay().getRotation();
-        int degrees = 0;
-        switch (rotation) {
-            case Surface.ROTATION_0: degrees = 0; break; //Natural orientation
-            case Surface.ROTATION_90: degrees = 90; break; //Landscape left
-            case Surface.ROTATION_180: degrees = 180; break;//Upside down
-            case Surface.ROTATION_270: degrees = 270; break;//Landscape right
-        }
-        int rotate = (info.orientation - degrees + 180) % 360;
-
-//STEP #2: Set the 'rotation' parameter
-        Camera.Parameters params = mCamera.getParameters();
-        params.setRotation(rotate);
-        mCamera.setParameters(params);
-
-        // Pour afficher notre Camera dans une view
+        /* Pour afficher notre Camera dans une view */
         //mPreview = new CameraPreview(this, mCamera);
         //FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
         //preview.addView(mPreview);
 
-        mCamera.startPreview();
-        new TakePhoto().execute("");
+        //mCamera.startPreview();
+
+        /* To Take Picture */
+        //new TakePhoto().execute("");
+
+        /* To Take Movie */
+        if(! prepareVideoRecorder()){
+            Log.v("Error", "Problemmm !");
+        }
+        mMediaRecorder.start();
+        new StopMovie().execute("");
+
     }
 
     @Override
@@ -91,7 +81,6 @@ public class MainActivity extends ActionBarActivity {
     private class TakePhoto extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            //mMediaRecorder.start();
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -104,8 +93,6 @@ public class MainActivity extends ActionBarActivity {
         protected void onPostExecute(String result) {
             TextView txt = (TextView) findViewById(R.id.textView);
             txt.setText("Executed"); // txt.setText(result);
-            //mMediaRecorder.stop();
-            //releaseMediaRecorder();
             mCamera.takePicture(null, null, mPicture);
             CharSequence text = "Image sauvegardee !";
             Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
@@ -140,20 +127,27 @@ public class MainActivity extends ActionBarActivity {
         }
     };
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     private boolean prepareVideoRecorder(){
 
         mCamera = cam.getCameraInstance(this);
+
+        Camera.CameraInfo info = new Camera.CameraInfo();
+        Camera.getCameraInfo(Camera.CameraInfo.CAMERA_FACING_BACK, info);
+        int rotation = this.getWindowManager().getDefaultDisplay().getRotation();
+        int degrees = 0;
+        switch (rotation) {
+            case Surface.ROTATION_0: degrees = 0; break; //Natural orientation
+            case Surface.ROTATION_90: degrees = 90; break; //Landscape left
+            case Surface.ROTATION_180: degrees = 180; break;//Upside down
+            case Surface.ROTATION_270: degrees = 270; break;//Landscape right
+        }
+        int rotate = (info.orientation - degrees + 180) % 360;
+
+        //STEP #2: Set the 'rotation' parameter
+        Camera.Parameters params = mCamera.getParameters();
+        params.setRotation(rotate);
+        mCamera.setParameters(params);
+
         mMediaRecorder = new MediaRecorder();
 
         // Step 1: Unlock and set camera to MediaRecorder
@@ -166,12 +160,15 @@ public class MainActivity extends ActionBarActivity {
 
         // Step 3: Set a CamcorderProfile (requires API Level 8 or higher)
         mMediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH));
+        //mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        //mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+        //mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
 
         // Step 4: Set output file
         mMediaRecorder.setOutputFile(cam.getOutputMediaFile(MEDIA_TYPE_VIDEO).toString());
 
         // Step 5: Set the preview output
-        mMediaRecorder.setPreviewDisplay(mPreview.getHolder().getSurface());
+        //mMediaRecorder.setPreviewDisplay(mPreview.getHolder().getSurface());
 
         // Step 6: Prepare configured MediaRecorder
         try {
@@ -208,6 +205,37 @@ public class MainActivity extends ActionBarActivity {
         if (mCamera != null){
             mCamera.release();        // release the camera for other applications
             mCamera = null;
+        }
+    }
+
+
+    private class StopMovie extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                Thread.interrupted();
+            }
+
+            Log.v("etape fin", "ici c'est la fin !!!!!!");
+            mMediaRecorder.stop();
+            releaseMediaRecorder();
+            mCamera.lock();
+            mCamera.release();
+
+            return "Executed";
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            //TextView txt = (TextView) findViewById(R.id.textView);
+            //txt.setText("Executed"); // txt.setText(result);
+
+            //mCamera.takePicture(null, null, mPicture);
+            CharSequence text = "Movie sauvegardee !";
+            Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
         }
     }
 }
