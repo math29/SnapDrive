@@ -1,41 +1,56 @@
 package com.snapdrive.snapdrive;
 
+import android.hardware.Camera;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
 
 public class MainActivity extends ActionBarActivity {
+    //private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+    private Uri fileUri;
+    Cam cam;
+    Camera mCamera;
+    CameraPreview mPreview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*toggle = (ToggleButton)findViewById(R.id.speechToggle);
-        smsText = (TextView)findViewById(R.id.sms_text);
-        smsSender = (TextView)findViewById(R.id.sms_sender);
+        mCamera = cam.getCameraInstance();
 
-        toggleListener = new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton view, boolean isChecked) {
-                if(isChecked){
-                    speaker.allow(true);
-                    speaker.speak(getString(R.string.start_speaking));
-                }else{
-                    speaker.speak(getString(R.string.stop_speaking));
-                    speaker.allow(false);
+        mPreview = new CameraPreview(this, mCamera);
+        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
+        preview.addView(mPreview);
+
+        //mCamera.takePicture(null, null, mPicture);
+
+        Button captureButton = (Button) findViewById(R.id.button_capture);
+        captureButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // get an image from the camera
+                        mCamera.takePicture(null, null, cam.mPicture);
+                    }
                 }
-            }
-        };
-        toggle.setOnCheckedChangeListener(toggleListener);*/
+        );
 
-        /*checkTTS();
-        initializeSMSReceiver();
-        registerSMSReceiver();*/
+        new TakePhoto().execute("");
+        //takePhoto(captureButton);
     }
 
+    private void takePhoto(Button captureButton){
+        captureButton.performClick();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -58,6 +73,35 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+    private class TakePhoto extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                Thread.interrupted();
+            }
+            return "Executed";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            TextView txt = (TextView) findViewById(R.id.textView);
+            txt.setText("Executed"); // txt.setText(result);
+            mCamera.takePicture(null, null, cam.mPicture);
+            //fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+            //Toast.makeText(this, "Image saved to:\n" +
+              //      data.getData(), Toast.LENGTH_LONG).show();
+            //savefile(fileUri);
+            // might want to change "executed" for the returned string passed
+            // into onPostExecute() but that is upto you
+        }
+    }
+
+
+
 
 
 }
