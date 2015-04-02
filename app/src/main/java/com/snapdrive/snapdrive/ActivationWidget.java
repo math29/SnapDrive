@@ -39,9 +39,9 @@ public class ActivationWidget extends AppWidgetProvider{
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout); // On récupère les Views de notre layout
         //views.setTextViewText(R.id.hello_world, "Hello Developpez !"); // On peut agir sur ces vues
         if(prefs.isActivate()){
-            views.setImageViewResource(R.id.img,android.R.drawable.ic_btn_speak_now);
+            views.setImageViewResource(R.id.img,R.drawable.snapdrive_on);
         }else{
-            views.setImageViewResource(R.id.img,android.R.drawable.ic_dialog_map);
+            views.setImageViewResource(R.id.img,R.drawable.snapdrive_off);
         }
         appWidgetManager.updateAppWidget(appWidgetId, views); // On met ensuite à jour l'affichage du widget
 
@@ -58,11 +58,19 @@ public class ActivationWidget extends AppWidgetProvider{
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        Toast.makeText(context,"Receive",Toast.LENGTH_SHORT).show();
+
         if(intent.getAction().equals(ACTIVER)){
             AppPreferences prefs = new AppPreferences(context);
             boolean activation = !prefs.isActivate();
             prefs.activate(activation);
+
+            Intent i = new Intent(context, TTSService.class);
+            if(prefs.isActivate()) {
+                i.putExtra("action", "activation");
+            }else{
+                i.putExtra("action","desactivation");
+            }
+            context.startService(i);
 
             Bundle extras = intent.getExtras();
             if(extras!=null) {

@@ -21,7 +21,8 @@ public class SmsReceiver extends BroadcastReceiver{
         AppPreferences prefs = new AppPreferences(context);
         if(prefs.isActivate()) {
             Intent i = new Intent(context, TTSService.class);
-            Toast.makeText(context, "message: " + sms.get_message(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "message: " + sms.get_message(), Toast.LENGTH_SHORT).show();
+            i.putExtra("action","message");
             i.putExtra("Message", sms.get_message());
             i.putExtra("Sender", sms.getContactName());
             context.startService(i);

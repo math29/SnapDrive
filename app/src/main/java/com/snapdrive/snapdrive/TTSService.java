@@ -13,9 +13,10 @@ import java.util.Locale;
  */
 public class TTSService extends Service implements TextToSpeech.OnInitListener{
 
-    private String sender, message;
+    private String action, sender, message;
     private TextToSpeech mTts;
     private static final String TAG="TTSService";
+    private boolean init = false;
 
     @Override
 
@@ -34,6 +35,7 @@ public class TTSService extends Service implements TextToSpeech.OnInitListener{
 
         mTts.setSpeechRate(0.8f);
         Log.v(TAG, "oncreate_service");
+        action = "UNKNOWN";
         sender ="UNKNOWN";
         message = "No message";
         super.onCreate();
@@ -51,12 +53,23 @@ public class TTSService extends Service implements TextToSpeech.OnInitListener{
 
     @Override
     public void onStart(Intent intent, int startId) {
-
+        action = intent.getExtras().getString("action");
         sender = intent.getExtras().getString("Sender");
         message = intent.getExtras().getString("Message");
-        say(getResources().getString(R.string.sms_received)+sender);
-        mTts.playSilence(1500, TextToSpeech.QUEUE_ADD,null);
-        say(message);
+        //say(getResources().getString(R.string.sms_received)+sender);
+        //mTts.playSilence(1500, TextToSpeech.QUEUE_ADD,null);
+        //say(message);
+        if(init){
+            if(action.equals("message")) {
+                say(getResources().getString(R.string.sms_received) + sender);
+                mTts.playSilence(1500, TextToSpeech.QUEUE_ADD, null);
+                say(message);
+            }else if(action.equals("activation")){
+                say(getResources().getString(R.string.activation));
+            }else if(action.equals("desactivation")){
+                say(getResources().getString(R.string.desactivation));
+            }
+        }
 
         Log.v(TAG, "onstart_service");
         super.onStart(intent, startId);
@@ -65,15 +78,23 @@ public class TTSService extends Service implements TextToSpeech.OnInitListener{
     @Override
     public void onInit(int status) {
         Log.v(TAG, "oninit");
+        Log.d(TAG, "Action: "+action);
         if (status == TextToSpeech.SUCCESS) {
             int result = mTts.setLanguage(Locale.getDefault());
             if (result == TextToSpeech.LANG_MISSING_DATA ||
                     result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Log.v(TAG, "Language is not available.");
             } else {
-                say(getResources().getString(R.string.sms_received)+sender);
-                mTts.playSilence(1500, TextToSpeech.QUEUE_ADD,null);
-                say(message);
+                init = true;
+                if(action.equals("message")) {
+                    say(getResources().getString(R.string.sms_received) + sender);
+                    mTts.playSilence(1500, TextToSpeech.QUEUE_ADD, null);
+                    say(message);
+                }else if(action.equals("activation")){
+                    say(getResources().getString(R.string.activation));
+                }else if(action.equals("desactivation")){
+                    say(getResources().getString(R.string.desactivation));
+                }
 
             }
         } else {
