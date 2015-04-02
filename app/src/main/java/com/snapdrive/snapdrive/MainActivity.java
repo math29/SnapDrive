@@ -11,17 +11,18 @@ import android.widget.ToggleButton;
 
 public class MainActivity extends ActionBarActivity {
     AppPreferences prefs;
+    ToggleButton toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ToggleButton toggle = (ToggleButton)findViewById(R.id.speechToggle);
+        toggle = (ToggleButton)findViewById(R.id.speechToggle);
         //smsText = (TextView)findViewById(R.id.sms_text);
         //smsSender = (TextView)findViewById(R.id.sms_sender);
         prefs = new AppPreferences(this);
-        toggle.setChecked(prefs.isActivate());
+
 
         CompoundButton.OnCheckedChangeListener toggleListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -72,4 +73,13 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void refresh(){
+        toggle.setChecked(prefs.isActivate());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refresh();
+    }
 }
