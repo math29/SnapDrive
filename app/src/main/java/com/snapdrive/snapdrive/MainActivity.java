@@ -6,6 +6,7 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -27,6 +28,8 @@ public class MainActivity extends ActionBarActivity {
     Camera mCamera;
     CameraPreview mPreview;
     private MediaRecorder mMediaRecorder;
+    private Handler handler;
+    private Surface surface;
 
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
@@ -50,9 +53,42 @@ public class MainActivity extends ActionBarActivity {
         if(! prepareVideoRecorder()){
             Log.v("Error", "Problemmm !");
         }
-        mMediaRecorder.start();
-        new StopMovie().execute("");
 
+        /*handler = new Handler();
+        Runnable r=new Runnable()
+        {
+            public void run()
+            {
+
+                mMediaRecorder.stop();Log.v("Blah :", "Ici il se passe quelque chose");
+                releaseMediaRecorder();
+                mCamera.lock();
+                mCamera.release();
+
+            }
+
+        };
+        handler.postDelayed(r, 4000);*/
+
+        mMediaRecorder.setOnInfoListener(new MediaRecorder.OnInfoListener() {
+            @Override
+            public void onInfo(MediaRecorder mr, int what, int extra) {
+                if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
+                    try {
+                        mMediaRecorder.stop();
+                        Log.v("Ici :", "il se passe quelque chose !!!!!!!!");
+                    }catch (IllegalStateException e) {
+                        Log.d("Error", "Error accessing file: " + e.getMessage());
+                    }
+
+                    releaseMediaRecorder();
+
+                }
+            }
+        });
+
+        CharSequence text = "Movie sauvegardee !";
+        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -131,45 +167,72 @@ public class MainActivity extends ActionBarActivity {
 
         mCamera = cam.getCameraInstance(this);
 
-        Camera.CameraInfo info = new Camera.CameraInfo();
+        /*Camera.CameraInfo info = new Camera.CameraInfo();
         Camera.getCameraInfo(Camera.CameraInfo.CAMERA_FACING_BACK, info);
         int rotation = this.getWindowManager().getDefaultDisplay().getRotation();
         int degrees = 0;
         switch (rotation) {
-            case Surface.ROTATION_0: degrees = 0; break; //Natural orientation
-            case Surface.ROTATION_90: degrees = 90; break; //Landscape left
-            case Surface.ROTATION_180: degrees = 180; break;//Upside down
-            case Surface.ROTATION_270: degrees = 270; break;//Landscape right
+            case Surface.ROTATION_0:
+                degrees = 0;
+                break; //Natural orientation
+            case Surface.ROTATION_90:
+                degrees = 90;
+                break; //Landscape left
+            case Surface.ROTATION_180:
+                degrees = 180;
+                break;//Upside down
+            case Surface.ROTATION_270:
+                degrees = 270;
+                break;//Landscape right
         }
         int rotate = (info.orientation - degrees + 180) % 360;
 
         //STEP #2: Set the 'rotation' parameter
         Camera.Parameters params = mCamera.getParameters();
         params.setRotation(rotate);
-        mCamera.setParameters(params);
+        mCamera.setParameters(params);*/
+
+        mCamera.unlock();
 
         mMediaRecorder = new MediaRecorder();
 
+        //mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        //mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+        //mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        //mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        //mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
+
         // Step 1: Unlock and set camera to MediaRecorder
-        mCamera.unlock();
+        //surface = new Surface(new SurfaceTexture(MEDIA_TYPE_IMAGE));
+        //mMediaRecorder.setPreviewDisplay(surface);
         mMediaRecorder.setCamera(mCamera);
 
         // Step 2: Set sources
-        mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
+        mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
 
         // Step 3: Set a CamcorderProfile (requires API Level 8 or higher)
-        mMediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH));
-        //mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        mMediaRecorder.setProfile(CamcorderProfile.get(1 , CamcorderProfile.QUALITY_HIGH));
+        //mMediaRecorder.setVideoFrameRate(15);
+
+        //mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
         //mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
         //mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
 
         // Step 4: Set output file
         mMediaRecorder.setOutputFile(cam.getOutputMediaFile(MEDIA_TYPE_VIDEO).toString());
+        //mMediaRecorder.setOutputFile("/sdcard/myvideo.mp4");
 
         // Step 5: Set the preview output
         //mMediaRecorder.setPreviewDisplay(mPreview.getHolder().getSurface());
 
+
+        mMediaRecorder.setMaxDuration(6000);
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+        }
         // Step 6: Prepare configured MediaRecorder
         try {
             mMediaRecorder.prepare();
@@ -182,7 +245,11 @@ public class MainActivity extends ActionBarActivity {
             releaseMediaRecorder();
             return false;
         }
-        return true;
+
+        mMediaRecorder.start();
+
+
+    return true;
     }
 
     @Override
