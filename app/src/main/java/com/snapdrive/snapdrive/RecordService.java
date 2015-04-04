@@ -32,8 +32,8 @@ public class RecordService extends Service {
     @Override
     public void onCreate() {
         mRecordingStatus = false;
-        mSurfaceView = CamreaActivity.mSurfaceView;
-        mSurfaceHolder = CamreaActivity.mSurfaceHolder;
+        mSurfaceView = CameraActivity.mSurfaceView;
+        mSurfaceHolder = CameraActivity.mSurfaceHolder;
 
         // open front camera
         mServiceCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
@@ -71,8 +71,9 @@ public class RecordService extends Service {
     public boolean startRecording(){
         try {
             Toast.makeText(getBaseContext(), "Recording Started", Toast.LENGTH_SHORT).show();
-            mServiceCamera.release();
 
+            if(mServiceCamera==null)mServiceCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
+            mServiceCamera.reconnect();
             // camera parameters
             Camera.Parameters params = mServiceCamera.getParameters();
             mServiceCamera.setParameters(params);
@@ -113,6 +114,7 @@ public class RecordService extends Service {
             mMediaRecorder.setOutputFile(getOutputMediaFile(2).getPath());
             mMediaRecorder.setVideoFrameRate(20);
             mMediaRecorder.setVideoSize(mPreviewSize.width, mPreviewSize.height);
+            //mMediaRecorder.setVideoSize(320,400);
             mMediaRecorder.setPreviewDisplay(mSurfaceHolder.getSurface());
             // video duration
             mMediaRecorder.setMaxDuration(6000);

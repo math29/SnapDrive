@@ -1,41 +1,67 @@
 package com.snapdrive.snapdrive;
 
+import android.widget.CompoundButton;
+import android.widget.ToggleButton;
+
+
+import android.media.MediaRecorder;
+import android.net.Uri;
+
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
+
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
+import android.widget.ToggleButton;
+
+import android.view.Surface;
+
 
 
 public class MainActivity extends ActionBarActivity {
+
+
+
+    AppPreferences prefs;
+    ToggleButton toggle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*toggle = (ToggleButton)findViewById(R.id.speechToggle);
-        smsText = (TextView)findViewById(R.id.sms_text);
-        smsSender = (TextView)findViewById(R.id.sms_sender);
 
-        toggleListener = new CompoundButton.OnCheckedChangeListener() {
+
+        toggle = (ToggleButton)findViewById(R.id.speechToggle);
+        //smsText = (TextView)findViewById(R.id.sms_text);
+        //smsSender = (TextView)findViewById(R.id.sms_sender);
+        prefs = new AppPreferences(this);
+
+
+        CompoundButton.OnCheckedChangeListener toggleListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton view, boolean isChecked) {
+                prefs.activate(isChecked);
+                /*
                 if(isChecked){
-                    speaker.allow(true);
-                    speaker.speak(getString(R.string.start_speaking));
+                    //speaker.allow(true);
+                    //speaker.speak(getString(R.string.start_speaking));
+                    //startActivity(new Intent(getApplicationContext(),SpeakActivity.class));
+                    Intent i = new Intent(getApplicationContext(),TTSService.class);
+                    i.putExtra("Message","Tabernak petit branquignol");
+                    i.putExtra("Sender","Yoann Diquélou");
+                    startService(i);
                 }else{
-                    speaker.speak(getString(R.string.stop_speaking));
-                    speaker.allow(false);
-                }
+                    //speaker.speak(getString(R.string.stop_speaking));
+                    //speaker.allow(false);
+                }*/
             }
         };
-        toggle.setOnCheckedChangeListener(toggleListener);*/
-
-        /*checkTTS();
-        initializeSMSReceiver();
-        registerSMSReceiver();*/
+        toggle.setOnCheckedChangeListener(toggleListener);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -59,5 +85,14 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void refresh(){
+        toggle.setChecked(prefs.isActivate());
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refresh();
+
+    }
 }
