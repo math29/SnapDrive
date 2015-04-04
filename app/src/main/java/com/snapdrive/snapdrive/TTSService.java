@@ -20,6 +20,7 @@ public class TTSService extends Service implements TextToSpeech.OnInitListener{
     private TextToSpeech mTts;
     private static final String TAG="TTSService";
     private boolean init = false;
+    private boolean next = false;
 
     @Override
 
@@ -36,7 +37,7 @@ public class TTSService extends Service implements TextToSpeech.OnInitListener{
                 this  // OnInitListener
         );
 
-        mTts.setSpeechRate(0.8f);
+        mTts.setSpeechRate(0.9f);
         Log.v(TAG, "oncreate_service");
         action = "UNKNOWN";
         sender ="UNKNOWN";
@@ -64,13 +65,13 @@ public class TTSService extends Service implements TextToSpeech.OnInitListener{
         //say(message);
         if(init){
             if(action.equals("message")) {
-                say(getResources().getString(R.string.sms_received) + sender);
+                say(getResources().getString(R.string.sms_received) + sender,"sender");
                 mTts.playSilence(1500, TextToSpeech.QUEUE_ADD, null);
-                say(message);
+                say(message,"message");
             }else if(action.equals("activation")){
-                say(getResources().getString(R.string.activation));
+                say(getResources().getString(R.string.activation),"activation");
             }else if(action.equals("desactivation")){
-                say(getResources().getString(R.string.desactivation));
+                say(getResources().getString(R.string.desactivation),"desactivation");
             }
         }
 
@@ -90,23 +91,25 @@ public class TTSService extends Service implements TextToSpeech.OnInitListener{
             } else {
                 init = true;
                 if(action.equals("message")) {
-                    say(getResources().getString(R.string.sms_received) + sender);
+                    say(getResources().getString(R.string.sms_received) + sender,"sender");
                     mTts.playSilence(1500, TextToSpeech.QUEUE_ADD, null);
 
                     mTts.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
                         @Override
                         public void onUtteranceCompleted(String utteranceId) {
-                            Intent i = new Intent(getApplicationContext(),CameraActivity.class);
-                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(i);
+                            if(utteranceId.equals("message")) {
+                                Intent i = new Intent(getApplicationContext(), CameraActivity.class);
+                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(i);
+                            }
                         }
                     });
 
-                    say(message);
+                    say(message,"message");
                 }else if(action.equals("activation")){
-                    say(getResources().getString(R.string.activation));
+                    say(getResources().getString(R.string.activation),"activation");
                 }else if(action.equals("desactivation")){
-                    say(getResources().getString(R.string.desactivation));
+                    say(getResources().getString(R.string.desactivation),"desactivation");
                 }
 
             }
@@ -117,10 +120,10 @@ public class TTSService extends Service implements TextToSpeech.OnInitListener{
 
 
 
-    private void say(String str) {
+    private void say(String str, String action) {
         HashMap<String, String> myHashAlarm = new HashMap<String, String>();
         myHashAlarm.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_ALARM));
-        myHashAlarm.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "SOME MESSAGE");
+        myHashAlarm.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, action);
         mTts.speak(str,
                 TextToSpeech.QUEUE_ADD,
                 myHashAlarm);

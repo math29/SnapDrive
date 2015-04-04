@@ -71,8 +71,6 @@ public class RecordService extends Service {
     public boolean startRecording(){
         try {
             Toast.makeText(getBaseContext(), "Recording Started", Toast.LENGTH_SHORT).show();
-
-            if(mServiceCamera==null)mServiceCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
             mServiceCamera.reconnect();
             // camera parameters
             Camera.Parameters params = mServiceCamera.getParameters();
@@ -112,7 +110,7 @@ public class RecordService extends Service {
 
             // set the filePath in SnapDrive folder
             mMediaRecorder.setOutputFile(getOutputMediaFile(2).getPath());
-            mMediaRecorder.setVideoFrameRate(20);
+            mMediaRecorder.setVideoFrameRate(30);
             mMediaRecorder.setVideoSize(mPreviewSize.width, mPreviewSize.height);
             //mMediaRecorder.setVideoSize(320,400);
             mMediaRecorder.setPreviewDisplay(mSurfaceHolder.getSurface());
