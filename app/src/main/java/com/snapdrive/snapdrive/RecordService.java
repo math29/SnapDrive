@@ -19,7 +19,7 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.Toast;
-public class RecordService extends Service {
+public class RecordService extends Service{
 
     private static final String TAG = "RecordService";
     private SurfaceView mSurfaceView;
@@ -82,6 +82,7 @@ public class RecordService extends Service {
                     + " height = " + mPreviewSize.height);
             p.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
             p.setPreviewFormat(PixelFormat.YCbCr_420_SP);
+
             mServiceCamera.setParameters(p);
 
             // set the preview display, unfortunately we must have it

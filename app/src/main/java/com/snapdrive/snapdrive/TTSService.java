@@ -57,24 +57,27 @@ public class TTSService extends Service implements TextToSpeech.OnInitListener{
 
     @Override
     public void onStart(Intent intent, int startId) {
-        action = intent.getExtras().getString("action");
-        sender = intent.getExtras().getString("Sender");
-        message = intent.getExtras().getString("Message");
-        //say(getResources().getString(R.string.sms_received)+sender);
-        //mTts.playSilence(1500, TextToSpeech.QUEUE_ADD,null);
-        //say(message);
-        if(init){
-            if(action.equals("message")) {
-                say(getResources().getString(R.string.sms_received) + sender,"sender");
-                mTts.playSilence(1500, TextToSpeech.QUEUE_ADD, null);
-                say(message,"message");
-            }else if(action.equals("activation")){
-                say(getResources().getString(R.string.activation),"activation");
-            }else if(action.equals("desactivation")){
-                say(getResources().getString(R.string.desactivation),"desactivation");
+        if(intent.getExtras().getString("action")!=null &&
+                intent.getExtras().getString("sender")!=null &&
+                intent.getExtras().getString("message")!=null) {
+            action = intent.getExtras().getString("action");
+            sender = intent.getExtras().getString("Sender");
+            message = intent.getExtras().getString("Message");
+            //say(getResources().getString(R.string.sms_received)+sender);
+            //mTts.playSilence(1500, TextToSpeech.QUEUE_ADD,null);
+            //say(message);
+            if (init) {
+                if (action.equals("message")) {
+                    say(getResources().getString(R.string.sms_received) + sender, "sender");
+                    mTts.playSilence(1500, TextToSpeech.QUEUE_ADD, null);
+                    say(message, "message");
+                } else if (action.equals("activation")) {
+                    say(getResources().getString(R.string.activation), "activation");
+                } else if (action.equals("desactivation")) {
+                    say(getResources().getString(R.string.desactivation), "desactivation");
+                }
             }
         }
-
         Log.v(TAG, "onstart_service");
         super.onStart(intent, startId);
     }
