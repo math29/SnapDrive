@@ -1,7 +1,6 @@
 package com.snapdrive.snapdrive;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -62,8 +61,8 @@ public class MainActivity extends ActionBarActivity {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, Historic.class);
-                startActivity(intent);
+                /*Intent intent = new Intent(context, Historic.class);
+                startActivity(intent);*/
             }
         };
         toggle.setOnCheckedChangeListener(toggleListener);
