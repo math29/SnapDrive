@@ -65,6 +65,7 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(context, Historic.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in,R.anim.slide_out);
             }
         };
         toggle.setOnCheckedChangeListener(toggleListener);
