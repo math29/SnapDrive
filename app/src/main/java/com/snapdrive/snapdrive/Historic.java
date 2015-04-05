@@ -56,9 +56,9 @@ public class Historic extends ActionBarActivity{
         String selection=MediaStore.Video.Media.DATA +" like?";
         String[] selectionArgs=new String[]{"%SnapDrive%"};
         /*videocursor = managedQuery(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                proj, selection, selectionArgs, MediaStore.Video.Media.DATE_TAKEN + " DESC");
+                proj, selection, selectionArgs, MediaStore.Video.Media.DATE_TAKEN + " DESC");*/
         videocursor = managedQuery(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                proj, null,null, null);*/
+                proj, selection,selectionArgs, MediaStore.Video.Media.DATE_TAKEN + " DESC");
                 count = videocursor.getCount();
         videolist = (ListView) findViewById(R.id.PhoneVideoList);
         videolist.setAdapter(new VideoAdapter(context));
@@ -66,8 +66,7 @@ public class Historic extends ActionBarActivity{
     }
 
     private AdapterView.OnItemClickListener videogridlistener = new AdapterView.OnItemClickListener() {
-        public void onItemClick(AdapterView parent, View v, int position,
-                                long id) {
+        public void onItemClick(AdapterView parent, View v, int position, long id) {
             System.gc();
             video_column_index = videocursor
                     .getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
@@ -108,10 +107,6 @@ public class Historic extends ActionBarActivity{
                         .getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME);
                 videocursor.moveToPosition(position);
                 id = videocursor.getString(video_column_index);
-                video_column_index = videocursor
-                        .getColumnIndexOrThrow(MediaStore.Video.Media.SIZE);
-                videocursor.moveToPosition(position);
-                id += " Size(KB):" + videocursor.getString(video_column_index);
                 tv.setText(id);
             } else
                 tv = (TextView) convertView;
