@@ -14,4 +14,7 @@
 
     <string name="activation">Snapdraiive est maintenant activé</string>
     <string name="desactivation">Snapdraiive est maintenant désactivé</string>
+
+    <string name="hist">Historique</string>
+    <string name="action_back">Retour</string>
 </resources>

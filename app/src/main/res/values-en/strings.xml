@@ -15,4 +15,7 @@
 
     <string name="activation">Snapdrive is now ON</string>
     <string name="desactivation">Snapdrive is now OFF</string>
+
+    <string name="hist">Historic</string>
+    <string name="action_back">Back</string>
 </resources>
