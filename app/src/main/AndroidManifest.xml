@@ -27,7 +27,7 @@
         <activity
             android:name=".Historic"
             android:parentActivityName=".MainActivity"
-            />
+        />
         <service android:name=".RecordService"/>
 
         <activity android:name=".WidgetConfiguration">
