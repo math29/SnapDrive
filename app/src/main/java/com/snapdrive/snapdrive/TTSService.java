@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.IBinder;
+import android.speech.RecognitionService;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
@@ -57,9 +58,7 @@ public class TTSService extends Service implements TextToSpeech.OnInitListener{
 
     @Override
     public void onStart(Intent intent, int startId) {
-        if(intent.getExtras().getString("action")!=null &&
-                intent.getExtras().getString("sender")!=null &&
-                intent.getExtras().getString("message")!=null) {
+        if(intent.getExtras().getString("action")!=null) {
             action = intent.getExtras().getString("action");
             sender = intent.getExtras().getString("Sender");
             message = intent.getExtras().getString("Message");
@@ -75,6 +74,10 @@ public class TTSService extends Service implements TextToSpeech.OnInitListener{
                     say(getResources().getString(R.string.activation), "activation");
                 } else if (action.equals("desactivation")) {
                     say(getResources().getString(R.string.desactivation), "desactivation");
+                }else if(action.equals("reponse")){
+                    say(getResources().getString(R.string.reponse),"reponse");
+                }else if(action.equals("talk")){
+                    say(getResources().getString(R.string.talk),"talk");
                 }
             }
         }
@@ -97,23 +100,39 @@ public class TTSService extends Service implements TextToSpeech.OnInitListener{
                     say(getResources().getString(R.string.sms_received) + sender,"sender");
                     mTts.playSilence(1500, TextToSpeech.QUEUE_ADD, null);
 
-                    mTts.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
-                        @Override
-                        public void onUtteranceCompleted(String utteranceId) {
-                            if(utteranceId.equals("message")) {
-                                Intent i = new Intent(getApplicationContext(), CameraActivity.class);
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(i);
-                            }
-                        }
-                    });
+
 
                     say(message,"message");
                 }else if(action.equals("activation")){
                     say(getResources().getString(R.string.activation),"activation");
                 }else if(action.equals("desactivation")){
                     say(getResources().getString(R.string.desactivation),"desactivation");
+                }else if(action.equals("reponse")){
+                    say(getResources().getString(R.string.reponse),"reponse");
+                }else if(action.equals("talk")){
+                    say(getResources().getString(R.string.talk),"talk");
                 }
+                mTts.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
+                    @Override
+                    public void onUtteranceCompleted(String utteranceId) {
+                        if(utteranceId.equals("message")) {
+                            Intent i = new Intent(getApplicationContext(), CameraActivity.class);
+                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(i);
+                        }else if(utteranceId.equals("reponse")){
+                            Intent i = new Intent(getApplicationContext(), RecognitionActivity.class);
+                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            i.putExtra("action","response");
+                            startActivity(i);
+                        }else if(utteranceId.equals("talk")){
+                            Log.d(TAG,"TALK");
+                            Intent i = new Intent(getApplicationContext(), RecognitionActivity.class);
+                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            i.putExtra("action","talk");
+                            startActivity(i);
+                        }
+                    }
+                });
 
             }
         } else {

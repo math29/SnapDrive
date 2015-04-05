@@ -49,8 +49,8 @@
             </intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/activation_widget_meta" />
         </receiver>
+        <activity android:name=".RecognitionActivity"/>
         <service android:name=".TTSService" android:enabled="true"/>
-
     </application>
     <uses-permission android:name="android.permission.READ_SMS"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
@@ -59,6 +59,7 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.SEND_SMS"/>
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera.front" />

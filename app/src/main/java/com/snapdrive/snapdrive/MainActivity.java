@@ -1,5 +1,6 @@
 package com.snapdrive.snapdrive;
 
+import android.content.Intent;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
@@ -61,6 +62,11 @@ public class MainActivity extends ActionBarActivity {
             }
         };
         toggle.setOnCheckedChangeListener(toggleListener);
+
+        /*Intent i = new Intent(this, RecognitionActivity.class);
+        i.putExtra("action","reponse");
+        startActivity(i);*/
+
     }
 
     @Override
