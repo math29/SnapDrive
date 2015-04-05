@@ -7,6 +7,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -37,7 +39,6 @@ public class ActivationWidget extends AppWidgetProvider{
         AppPreferences prefs = new AppPreferences(context);
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout); // On récupère les Views de notre layout
-        //views.setTextViewText(R.id.hello_world, "Hello Developpez !"); // On peut agir sur ces vues
         if(prefs.isActivate()){
             views.setImageViewResource(R.id.img,R.drawable.snapdrive_on);
         }else{

@@ -1,5 +1,6 @@
 package com.snapdrive.snapdrive;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +14,7 @@ import android.util.Log;
 public class SmsApi {
 
     private Context mCtx;
-    final SmsManager sms = SmsManager.getDefault();
+    final SmsManager smsManager = SmsManager.getDefault();
 
     public SmsApi(Context context){
         mCtx = context;
@@ -40,5 +41,11 @@ public class SmsApi {
             Log.e(getClass().getName().toString(),"Exception: "+e.getMessage());
         }
         return sms_s;
+    }
+
+    public void sendSms(Sms_s sms){
+        Intent sentIntent = new Intent("SMS_ACTION_SENT");
+        PendingIntent spi = PendingIntent.getBroadcast(mCtx, 0, sentIntent, 0);
+        smsManager.sendTextMessage(sms.get_number(),null,sms.get_message(),spi, spi);
     }
 }

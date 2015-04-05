@@ -26,4 +26,14 @@ public class AppPreferences {
         edit.putBoolean("activated",activation);
         edit.commit();
     }
+
+    public void setNumber(String number){
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString("Number",number);
+        edit.commit();
+    }
+
+    public String getNumber(){
+        return prefs.getString("Number","N/A");
+    }
 }

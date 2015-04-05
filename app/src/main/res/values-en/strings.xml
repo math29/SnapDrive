@@ -16,6 +16,14 @@
     <string name="activation">Snapdrive is now ON</string>
     <string name="desactivation">Snapdrive is now OFF</string>
 
+
+    <string name="reponse">Do you want to answer?</string>
+    <string name="talk">Please tell me your answer!</string>
+
+    <string name="yes">yes</string>
+    <string name="no">no</string>
+
     <string name="hist">Historic</string>
     <string name="action_back">Back</string>
+
 </resources>

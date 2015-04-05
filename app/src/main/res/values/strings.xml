@@ -15,6 +15,13 @@
     <string name="activation">Snapdraiive est maintenant activé</string>
     <string name="desactivation">Snapdraiive est maintenant désactivé</string>
 
+    <string name="reponse">Voulez-vous répondre?</string>
+    <string name="talk">Veuillez me dicter votre réponse!</string>
+
+    <string name="yes">oui</string>
+    <string name="no">non</string>
+
     <string name="hist">Historique</string>
     <string name="action_back">Retour</string>
+
 </resources>
