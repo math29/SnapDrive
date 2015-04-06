@@ -1,7 +1,9 @@
 package com.snapdrive.snapdrive;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
@@ -14,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Created by Mathieu on 05/04/2015.
@@ -25,6 +26,7 @@ public class Historic extends ActionBarActivity{
     ListView videolist;
     int count;
     Context context;
+    MediaPlayer mediaPlayer = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,10 +74,20 @@ public class Historic extends ActionBarActivity{
                     .getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
             videocursor.moveToPosition(position);
             String filename = videocursor.getString(video_column_index);
-            /*   Intent intent = new Intent(MainActivity.this, ViewVideo.class);
-                  intent.putExtra("videofilename", filename);
-                  startActivity(intent);*/
-            Toast.makeText(getApplicationContext(), filename, Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(Historic.this, Historic_viewer.class);
+            intent.putExtra("videofilename", filename);
+            startActivity(intent);
+            //Toast.makeText(getApplicationContext(), filename, Toast.LENGTH_SHORT).show();
+
+            /*MediaPlayer mediaPlayer = new MediaPlayer();
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            try {
+                mediaPlayer.setDataSource(context, Uri.fromFile(new File(filename)));
+                mediaPlayer.prepare();
+            }catch(IOException e){
+            Log.e("Error", e.getMessage());
+        }
+            mediaPlayer.start();*/
         }
     };
 
