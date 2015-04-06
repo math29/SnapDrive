@@ -53,7 +53,8 @@
             </intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/activation_widget_meta" />
         </receiver>
-        <activity android:name=".RecognitionActivity"/>
+        <activity android:name=".RecognitionActivity"
+            android:theme="@style/Theme.Transparent"/>
         <service android:name=".TTSService" android:enabled="true"/>
     </application>
     <uses-permission android:name="android.permission.READ_SMS"/>
