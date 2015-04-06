@@ -38,7 +38,7 @@ public class RecordService extends Service{
         mSurfaceView = CameraActivity.mSurfaceView;
         mSurfaceHolder = CameraActivity.mSurfaceHolder;
         // open front camera
-        mServiceCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
+
 
 
         super.onCreate();
@@ -76,7 +76,9 @@ public class RecordService extends Service{
     public boolean startRecording(){
         try {
             Toast.makeText(getBaseContext(), "Recording Started", Toast.LENGTH_SHORT).show();
+            mServiceCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
             mServiceCamera.reconnect();
+
             // camera parameters
             Camera.Parameters params = mServiceCamera.getParameters();
             mServiceCamera.setParameters(params);

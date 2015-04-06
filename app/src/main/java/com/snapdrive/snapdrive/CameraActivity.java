@@ -45,7 +45,6 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback{
         mSurfaceHolder = mSurfaceView.getHolder();
         mSurfaceHolder.addCallback(this);
         mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-        mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
 
     }
 
@@ -76,6 +75,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback{
     }
 
     private void takePicture(){
+        mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
+
         mCamera.startPreview();
         Camera.PictureCallback pictureCB = new Camera.PictureCallback() {
             public void onPictureTaken(byte[] data, Camera cam) {
@@ -98,6 +99,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback{
                 FileOutputStream fos = new FileOutputStream(picFile);
                 fos.write(photoData);
                 fos.close();
+                mCamera.release();
+                mCamera = null;
                 Intent i = new Intent(getBaseContext(),TTSService.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 i.putExtra("action","reponse");

@@ -79,6 +79,7 @@ public class TTSService extends Service implements TextToSpeech.OnInitListener{
                 }else if(action.equals("talk")){
                     say(getResources().getString(R.string.talk),"talk");
                 }else if(action.equals("choice")){
+                    mTts.playSilence(1500, TextToSpeech.QUEUE_ADD, null);
                     say(getResources().getString(R.string.response_type),"choice");
                 }
             }
@@ -111,6 +112,7 @@ public class TTSService extends Service implements TextToSpeech.OnInitListener{
                 }else if(action.equals("talk")){
                     say(getResources().getString(R.string.talk),"talk");
                 }else if(action.equals("choice")){
+                    mTts.playSilence(1500, TextToSpeech.QUEUE_ADD, null);
                     say(getResources().getString(R.string.response_type),"choice");
                 }
                 mTts.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
