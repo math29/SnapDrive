@@ -36,4 +36,14 @@ public class AppPreferences {
     public String getNumber(){
         return prefs.getString("Number","N/A");
     }
+
+    public void setVideoPath(String path){
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString("videoPath",path);
+        edit.commit();
+    }
+
+    public String getVideoPath(){
+        return prefs.getString("videoPath","N/A");
+    }
 }
