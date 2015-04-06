@@ -2,12 +2,18 @@ package com.snapdrive.snapdrive;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.PixelFormat;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -15,6 +21,8 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
 
 /**
  * Created by Mathieu on 05/04/2015.
@@ -25,6 +33,8 @@ public class Historic extends ActionBarActivity{
     ListView videolist;
     int count;
     Context context;
+    private SurfaceView surfaceView;
+    MediaPlayer mediaPlayer = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,6 +45,7 @@ public class Historic extends ActionBarActivity{
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         context = getApplicationContext();
+        surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
 
         init_phone_video_grid();
     }
@@ -76,6 +87,36 @@ public class Historic extends ActionBarActivity{
                   intent.putExtra("videofilename", filename);
                   startActivity(intent);*/
             Toast.makeText(getApplicationContext(), filename, Toast.LENGTH_SHORT).show();
+
+            try{
+                if (mediaPlayer != null) {
+                    mediaPlayer.reset();
+                    mediaPlayer.release();
+                }else{
+                    getWindow().setFormat(PixelFormat.UNKNOWN);
+                    mediaPlayer = new MediaPlayer();
+                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                    mediaPlayer.setDataSource(context, Uri.fromFile(new File(filename)));
+                    SurfaceHolder surfaceHolder = surfaceView.getHolder();
+
+                    //surfaceHolder.setFixedSize(176, 144);
+                    surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+                    mediaPlayer.setDisplay(surfaceHolder);
+                    mediaPlayer.prepare();
+                    mediaPlayer.start();}
+            }catch (Exception e) {
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+
+            /*MediaPlayer mediaPlayer = new MediaPlayer();
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            try {
+                mediaPlayer.setDataSource(context, Uri.fromFile(new File(filename)));
+                mediaPlayer.prepare();
+            }catch(IOException e){
+            Log.e("Error", e.getMessage());
+        }
+            mediaPlayer.start();*/
         }
     };
 
