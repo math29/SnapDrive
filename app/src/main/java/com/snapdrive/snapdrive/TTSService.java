@@ -78,6 +78,8 @@ public class TTSService extends Service implements TextToSpeech.OnInitListener{
                     say(getResources().getString(R.string.reponse),"reponse");
                 }else if(action.equals("talk")){
                     say(getResources().getString(R.string.talk),"talk");
+                }else if(action.equals("choice")){
+                    say(getResources().getString(R.string.response_type),"choice");
                 }
             }
         }
@@ -99,9 +101,6 @@ public class TTSService extends Service implements TextToSpeech.OnInitListener{
                 if(action.equals("message")) {
                     say(getResources().getString(R.string.sms_received) + sender,"sender");
                     mTts.playSilence(1500, TextToSpeech.QUEUE_ADD, null);
-
-
-
                     say(message,"message");
                 }else if(action.equals("activation")){
                     say(getResources().getString(R.string.activation),"activation");
@@ -111,24 +110,31 @@ public class TTSService extends Service implements TextToSpeech.OnInitListener{
                     say(getResources().getString(R.string.reponse),"reponse");
                 }else if(action.equals("talk")){
                     say(getResources().getString(R.string.talk),"talk");
+                }else if(action.equals("choice")){
+                    say(getResources().getString(R.string.response_type),"choice");
                 }
                 mTts.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
                     @Override
                     public void onUtteranceCompleted(String utteranceId) {
                         if(utteranceId.equals("message")) {
-                            Intent i = new Intent(getApplicationContext(), CameraActivity.class);
-                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(i);
+                            action = "choice";
+                            say(getResources().getString(R.string.response_type),"choice");
                         }else if(utteranceId.equals("reponse")){
                             Intent i = new Intent(getApplicationContext(), RecognitionActivity.class);
                             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            i.putExtra("action","response");
+                            i.putExtra("action","reponse");
                             startActivity(i);
                         }else if(utteranceId.equals("talk")){
                             Log.d(TAG,"TALK");
                             Intent i = new Intent(getApplicationContext(), RecognitionActivity.class);
                             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             i.putExtra("action","talk");
+                            startActivity(i);
+                        }else if(utteranceId.equals("choice")){
+                            Log.d(TAG,"choice");
+                            Intent i = new Intent(getApplicationContext(), RecognitionActivity.class);
+                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            i.putExtra("action","choice");
                             startActivity(i);
                         }
                     }

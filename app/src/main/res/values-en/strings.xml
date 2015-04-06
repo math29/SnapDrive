@@ -18,10 +18,13 @@
 
 
     <string name="reponse">Do you want to answer?</string>
+    <string name="response_type">Say picture, video or no!</string>
     <string name="talk">Please tell me your answer!</string>
 
     <string name="yes">yes</string>
     <string name="no">no</string>
+    <string name="video">video</string>
+    <string name="picture">picture</string>
 
     <string name="hist">Historic</string>
     <string name="action_back">Back</string>

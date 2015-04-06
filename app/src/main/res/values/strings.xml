@@ -16,10 +16,13 @@
     <string name="desactivation">Snapdraiive est maintenant désactivé</string>
 
     <string name="reponse">Voulez-vous répondre?</string>
+    <string name="response_type">Dites photo, vidéo ou non!</string>
     <string name="talk">Veuillez me dicter votre réponse!</string>
 
     <string name="yes">oui</string>
     <string name="no">non</string>
+    <string name="video">vidéo</string>
+    <string name="picture">photo</string>
 
     <string name="hist">Historique</string>
     <string name="action_back">Retour</string>

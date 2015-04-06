@@ -18,6 +18,7 @@ public class RecognitionActivity extends Activity {
 
     private final int REQ_CODE_TO_SPEECH = 100;
     private final int REQ_CODE_TO_TALK = 99;
+    private final int REQ_CODE_TO_CHOICE = 98;
     private TextView responseTv;
 
     @Override
@@ -39,14 +40,18 @@ public class RecognitionActivity extends Activity {
                 Locale.getDefault());
         if(action.equals("talk")) {
             intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getResources().getString(R.string.talk));
-        }else{
+        }else if(action.equals("reponse")){
             intent.putExtra(RecognizerIntent.EXTRA_PROMPT,getResources().getString(R.string.reponse));
+        }else{
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT,getResources().getString(R.string.response_type));
         }
         try{
             if(action.equals("talk")) {
                 startActivityForResult(intent, REQ_CODE_TO_TALK);
-            }else{
+            }else if(action.equals("reponse")){
                 startActivityForResult(intent, REQ_CODE_TO_SPEECH);
+            }else{
+                startActivityForResult(intent, REQ_CODE_TO_CHOICE);
             }
         }catch (ActivityNotFoundException e){
             e.printStackTrace();
@@ -68,8 +73,8 @@ public class RecognitionActivity extends Activity {
                         //Toast.makeText(context, "message: " + sms.get_message(), Toast.LENGTH_SHORT).show();
                         i.putExtra("action", "talk");
                         startService(i);
-                        finish();
                     }
+                    finish();
                 }
                 break;
             case REQ_CODE_TO_TALK:
@@ -81,6 +86,25 @@ public class RecognitionActivity extends Activity {
                     Sms_s sms = new Sms_s(getApplicationContext(),prefs.getNumber(),result.get(0));
                     SmsApi api = new SmsApi(getApplicationContext());
                     api.sendSms(sms);
+                    finish();
+                }
+                break;
+            case REQ_CODE_TO_CHOICE:
+                if(resultCode == RESULT_OK && null != data){
+                    ArrayList<String> result = data
+                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    responseTv.setText(result.get(0));
+                    Intent i = new Intent(getApplicationContext(),CameraActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    if(result.get(0).contains(getResources().getString(R.string.video))){
+                        i.putExtra("action","video");
+                    }else if(result.get(0).contains(getResources().getString(R.string.picture))){
+                        i.putExtra("action","picture");
+                    }else{
+                        finish();
+                        break;
+                    }
+                    startActivity(i);
                     finish();
                 }
         }

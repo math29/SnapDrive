@@ -1,5 +1,7 @@
 package com.snapdrive.snapdrive;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,6 +13,7 @@ import android.hardware.Camera;
 import android.hardware.Camera.Size;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
@@ -36,6 +39,8 @@ public class RecordService extends Service{
         mSurfaceHolder = CameraActivity.mSurfaceHolder;
         // open front camera
         mServiceCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
+
+
         super.onCreate();
     }
 
@@ -50,8 +55,11 @@ public class RecordService extends Service{
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
         // if there are no records running, start one
-        if (mRecordingStatus == false)
-            startRecording();
+
+
+            if (mRecordingStatus == false)
+                startRecording();
+
         return START_STICKY;
     }
 
@@ -129,7 +137,7 @@ public class RecordService extends Service{
             mRecordingStatus = true;
             return true;
         } catch (IllegalStateException e) {
-//Log.d(TAG, e.getMessage());
+            //Log.d(TAG, e.getMessage());
             e.printStackTrace();
             return false;
         } catch (IOException e) {
@@ -163,6 +171,8 @@ public class RecordService extends Service{
         i.putExtra("action","reponse");
         startService(i);
     }
+
+
 
 
     /** Create a File for saving an image or video */
