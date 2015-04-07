@@ -34,7 +34,7 @@ public class Historic_viewer extends ActionBarActivity {
         mediaController.setAnchorView(videoView);
         videoView.setMediaController(mediaController);
         videoView.setVideoPath(filename);
-        videoView.set
+
         videoView.start();
         Log.v("Checkpoint", "On vient la ????????????????????????");
     }
