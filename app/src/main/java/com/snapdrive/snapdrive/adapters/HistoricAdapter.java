@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.media.session.MediaController;
 import android.provider.MediaStore;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -12,15 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import com.snapdrive.snapdrive.Historic_viewer;
 import com.snapdrive.snapdrive.R;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by crocus on 07/04/15.
@@ -69,18 +64,18 @@ public class HistoricAdapter extends BaseAdapter{
         TextView tv = (TextView)convertView.findViewById(R.id.videoName);
         TextView dateTv = (TextView)convertView.findViewById(R.id.date);
 
-        final String name = videoPaths.getString(videoPaths.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME));
+        final String name = videoPaths.getString(videoPaths.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DISPLAY_NAME));
         tv.setText(name);
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        Date d = new Date(Long.parseLong(videoPaths.getString(videoPaths.getColumnIndexOrThrow(MediaStore.Video.Media.DATE_TAKEN))));
+        //Date d = new Date(Long.parseLong(videoPaths.getString(videoPaths.getColumnIndexOrThrow(MediaStore.Video.Media.DATE_TAKEN))));
 
-        dateTv.setText("  "+d.toLocaleString());
+        //dateTv.setText("  "+d.toLocaleString());
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mCtx, Historic_viewer.class);
-                intent.putExtra("videofilename", videoPaths.getString(videoPaths.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)));
+                intent.putExtra("videofilename", videoPaths.getString(videoPaths.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA)));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mCtx.startActivity(intent);
             }
