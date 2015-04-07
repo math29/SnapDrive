@@ -1,26 +1,22 @@
 package com.snapdrive.snapdrive;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
-import android.hardware.Camera.Size;
-import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 public class RecordService extends Service{
 
 
@@ -80,16 +76,18 @@ public class RecordService extends Service{
             mServiceCamera.reconnect();
 
             // camera parameters
-            Camera.Parameters params = mServiceCamera.getParameters();
-            mServiceCamera.setParameters(params);
+
             Camera.Parameters p = mServiceCamera.getParameters();
-            final List<Size> listSize = p.getSupportedPreviewSizes();
-            Size mPreviewSize = listSize.get(2);
-            Log.v(TAG, "use: width = " + mPreviewSize.width
-                    + " height = " + mPreviewSize.height);
+            p.setRotation(CameraActivity.rotate);
+
+            final List<Camera.Size> listSize = p.getSupportedPreviewSizes();
+            Camera.Size mPreviewSize = listSize.get(2);
+            //Log.v(TAG, "use: width = " + mPreviewSize.width
+              //      + " height = " + mPreviewSize.height);
             p.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
             p.setPreviewFormat(PixelFormat.YCbCr_420_SP);
             mServiceCamera.setParameters(p);
+            mServiceCamera.setDisplayOrientation(CameraActivity.rotate);
             // set the preview display, unfortunately we must have it
             try {
                 mServiceCamera.setPreviewDisplay(mSurfaceHolder);
@@ -120,6 +118,7 @@ public class RecordService extends Service{
             mMediaRecorder.setPreviewDisplay(mSurfaceHolder.getSurface());
             // video duration
             mMediaRecorder.setMaxDuration(5000);
+            mMediaRecorder.setOrientationHint(CameraActivity.rotate);
             mMediaRecorder.prepare();
             mMediaRecorder.start();
             // listen the end of recording

@@ -1,20 +1,15 @@
 package com.snapdrive.snapdrive;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,6 +29,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback{
     public static Camera mCamera;
     public static boolean mPreviewRunning;
     public static String action;
+    public static int rotate;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,7 +41,21 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback{
         mSurfaceHolder = mSurfaceView.getHolder();
         mSurfaceHolder.addCallback(this);
         mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        rotate = getRotate();
+    }
 
+    private int getRotate(){
+        Camera.CameraInfo info = new Camera.CameraInfo();
+        Camera.getCameraInfo(Camera.CameraInfo.CAMERA_FACING_BACK, info);
+        int rotation = this.getWindowManager().getDefaultDisplay().getRotation();
+        int degrees = 0;
+        switch (rotation) {
+            case Surface.ROTATION_0: degrees = 0; break; //Natural orientation
+            case Surface.ROTATION_90: degrees = 90; break; //Landscape left
+            case Surface.ROTATION_180: degrees = 180; break;//Upside down
+            case Surface.ROTATION_270: degrees = 270; break;//Landscape right
+        }
+        return (info.orientation - degrees + 180) % 360;
     }
 
     @Override
@@ -76,6 +86,10 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback{
 
     private void takePicture(){
         mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
+
+        Camera.Parameters params = mCamera.getParameters();
+        params.setRotation(rotate);
+        mCamera.setParameters(params);
 
         mCamera.startPreview();
         Camera.PictureCallback pictureCB = new Camera.PictureCallback() {
