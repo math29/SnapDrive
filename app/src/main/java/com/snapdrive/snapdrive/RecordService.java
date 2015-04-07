@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
@@ -26,6 +27,7 @@ public class RecordService extends Service{
     private static Camera mServiceCamera;
     private boolean mRecordingStatus;
     private MediaRecorder mMediaRecorder;
+    String path;
 
 
     @Override
@@ -108,11 +110,14 @@ public class RecordService extends Service{
             mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
 
             // set the filePath in SnapDrive folder
-            String path = getOutputMediaFile(2).getPath();
+            path = getOutputMediaFile(2).getPath();
             AppPreferences prefs = new AppPreferences(getApplicationContext());
             prefs.setVideoPath(path);
             mMediaRecorder.setOutputFile(path);
-            mMediaRecorder.setVideoFrameRate(30);
+
+
+
+            mMediaRecorder.setVideoFrameRate(20);
             mMediaRecorder.setVideoSize(mPreviewSize.width, mPreviewSize.height);
 
             mMediaRecorder.setPreviewDisplay(mSurfaceHolder.getSurface());
@@ -160,6 +165,9 @@ public class RecordService extends Service{
         mMediaRecorder.stop();
         mMediaRecorder.reset();
         mServiceCamera.stopPreview();
+        Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        scanIntent.setData(Uri.fromFile(new File(path)));
+        sendBroadcast(scanIntent);
         mMediaRecorder.release();
         mServiceCamera.release();
         mServiceCamera = null;

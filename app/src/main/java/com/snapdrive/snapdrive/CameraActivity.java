@@ -3,6 +3,7 @@ package com.snapdrive.snapdrive;
 import android.app.Activity;
 import android.content.Intent;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -118,6 +119,9 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback{
                 fos.close();
                 mCamera.release();
                 mCamera = null;
+                Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                scanIntent.setData(Uri.fromFile(picFile));
+                sendBroadcast(scanIntent);
                 Intent i = new Intent(getBaseContext(),TTSService.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 i.putExtra("action","reponse");

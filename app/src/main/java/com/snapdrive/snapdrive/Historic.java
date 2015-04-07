@@ -66,8 +66,9 @@ public class Historic extends ActionBarActivity{
                 MediaStore.Files.FileColumns.DATE_MODIFIED};
         String selection=MediaStore.Files.FileColumns.DATA +" like?";
         String[] selectionArgs=new String[]{"%SnapDrive%"};
+        videocursor = null;
         videocursor = managedQuery(MediaStore.Files.getContentUri("external"),
-                proj, selection,selectionArgs, MediaStore.Files.FileColumns.DATE_MODIFIED + " DESC");
+                proj, selection,selectionArgs, MediaStore.Files.FileColumns.DATE_ADDED + " DESC");
         videocursor.moveToFirst();
         while(!videocursor.isAfterLast()){
             if(videocursor.getString(videocursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DISPLAY_NAME))!=null) {
