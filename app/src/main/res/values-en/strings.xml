@@ -31,4 +31,7 @@
     <string name="date">Date:</string>
 
     <string name="action_refresh">Refresh</string>
+
+    <string name="share_reaction">Share your reaction !</string>
+
 </resources>

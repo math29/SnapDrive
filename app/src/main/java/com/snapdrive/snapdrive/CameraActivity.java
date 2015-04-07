@@ -30,6 +30,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback{
     public static boolean mPreviewRunning;
     public static String action;
     public static int rotate;
+    public static AppPreferences prefs;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback{
         mSurfaceHolder.addCallback(this);
         mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         rotate = getRotate();
+        prefs = new AppPreferences(getApplicationContext());
     }
 
     private int getRotate(){
@@ -104,6 +106,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback{
         @Override
         protected String doInBackground(byte[]... data) {
             File picFile = getOutputMediaFile(1);
+            prefs.setVideoPath(picFile.getPath());
             if (picFile == null) {
                 Log.e(TAG, "Error creating media file; are storage permissions correct?");
                 return null;
@@ -136,6 +139,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback{
         // using Environment.getExternalStorageState() before doing this.
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES), "SnapDrive");
+
+
         // This location works best if you want the created images to be shared
         // between applications and persist after your app has been uninstalled.
         // Create the storage directory if it does not exist

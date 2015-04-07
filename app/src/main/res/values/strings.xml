@@ -29,4 +29,6 @@
     <string name="action_refresh">Actualiser</string>
     <string name="date">Date:</string>
 
+    <string name="share_reaction">Partagez votre réaction !</string>
+
 </resources>
