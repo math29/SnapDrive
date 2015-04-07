@@ -3,11 +3,13 @@ package com.snapdrive.snapdrive;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -20,11 +22,13 @@ public class RecognitionActivity extends Activity {
     private final int REQ_CODE_TO_TALK = 99;
     private final int REQ_CODE_TO_CHOICE = 98;
     private TextView responseTv;
+    private AppPreferences appPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recognition);
+        appPref = new AppPreferences(getApplicationContext());
         if(getIntent().getExtras().getString("action")!=null) {
             String action = getIntent().getExtras().getString("action");
             responseTv = (TextView) findViewById(R.id.textView);
@@ -74,6 +78,15 @@ public class RecognitionActivity extends Activity {
                         i.putExtra("action", "talk");
                         startService(i);
                     }
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.putExtra("sms_body", "My reaction on SnapDrive");
+                    intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(appPref.getVideoPath())));
+                    if(appPref.getVideoPath().toLowerCase().contains("mp4")) {
+                        intent.setType("video/mp4");
+                    }else{
+                        intent.setType("image/*");
+                    }
+                    startActivity(Intent.createChooser(intent,"Share your reaction !"));
                     finish();
                 }
                 break;
