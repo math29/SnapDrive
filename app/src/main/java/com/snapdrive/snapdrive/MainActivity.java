@@ -3,7 +3,9 @@ package com.snapdrive.snapdrive;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,6 +39,7 @@ public class MainActivity extends ActionBarActivity {
         //smsSender = (TextView)findViewById(R.id.sms_sender);
         prefs = new AppPreferences(this);
         context = getApplicationContext();
+
 
         CompoundButton.OnCheckedChangeListener toggleListener = new CompoundButton.OnCheckedChangeListener() {
             @Override

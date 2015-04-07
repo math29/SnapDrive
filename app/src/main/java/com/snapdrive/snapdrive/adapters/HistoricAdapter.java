@@ -130,6 +130,9 @@ public class HistoricAdapter extends BaseAdapter{
             public void onClick(View v) {
                 File f = new File(videoPaths.get(position).get_data());
                 f.delete();
+                Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                scanIntent.setData(Uri.fromFile(new File(videoPaths.get(position).get_data())));
+                mCtx.sendBroadcast(scanIntent);
                 videoPaths.remove(position);
                 notifyDataSetChanged();
             }
