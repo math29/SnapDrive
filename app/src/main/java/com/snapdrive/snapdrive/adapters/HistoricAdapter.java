@@ -137,18 +137,6 @@ public class HistoricAdapter extends BaseAdapter{
                 notifyDataSetChanged();
             }
         });
-        /*try {
-            //d = f.parse();
-
-            long milliseconds = d.getTime();
-            dateTv.setText(""+d.toLocaleString());
-
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }*/
-
-
 
 
         android.widget.MediaController mediaController = new android.widget.MediaController(mCtx);

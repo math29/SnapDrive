@@ -119,7 +119,6 @@ public class RecordService extends Service{
 
             mMediaRecorder.setVideoFrameRate(20);
             mMediaRecorder.setVideoSize(mPreviewSize.width, mPreviewSize.height);
-
             mMediaRecorder.setPreviewDisplay(mSurfaceHolder.getSurface());
             // video duration
             mMediaRecorder.setMaxDuration(5000);
