@@ -31,4 +31,5 @@
     <string name="date">Date:</string>
 
     <string name="action_refresh">Refresh</string>
+    <string name="size">Size:</string>
 </resources>

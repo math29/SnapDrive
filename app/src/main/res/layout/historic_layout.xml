@@ -17,7 +17,20 @@
         android:layout_gravity="center_horizontal"
         android:textColor="@color/timestamp"
         android:id="@+id/videoName"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_media_play"
+            android:id="@+id/play"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,12 +46,41 @@
             android:textColor="@color/timestamp"
             android:id="@+id/date"/>
         </LinearLayout>
-
-    <ImageView
-        android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:text="@string/size"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/timestamp"
+                android:id="@+id/size"/>
+        </LinearLayout>
+    </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:id="@+id/picture"/>
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@android:drawable/ic_media_play"
+            android:background="@drawable/bottom_button_selector"
+            android:id="@+id/playButton"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableRight="@android:drawable/ic_delete"
+            android:background="@drawable/bottom_button_selector"/>
+        </LinearLayout>
 
 </LinearLayout>
 </LinearLayout>

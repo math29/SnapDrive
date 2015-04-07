@@ -28,5 +28,6 @@
     <string name="action_back">Retour</string>
     <string name="action_refresh">Actualiser</string>
     <string name="date">Date:</string>
+    <string name="size">Taille:</string>
 
 </resources>
