@@ -1,5 +1,7 @@
 # SnapDrive
-![logo](https://raw.githubusercontent.com/math29/SnapDrive/master/SnapDrive-logo.png)
+
+![logo](https://github.com/math29/SnapDrive/blob/master/SnapDrive-logo.png)
+
 Application Android d'assistance à l'utilisation de portable au volant (et pas que !)
 
 ## Présentation
