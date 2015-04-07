@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.snapdrive.snapdrive.Historic_viewer;
@@ -64,16 +67,33 @@ public class HistoricAdapter extends BaseAdapter{
 
 
         TextView tv = (TextView)convertView.findViewById(R.id.videoName);
+        TextView sizeTv = (TextView)convertView.findViewById(R.id.size);
         TextView dateTv = (TextView)convertView.findViewById(R.id.date);
 
+        ImageButton imgPlay = (ImageButton)convertView.findViewById(R.id.playButton);
+        ImageButton imgShare = (ImageButton)convertView.findViewById(R.id.shareButton);
+        ImageButton imgDelete = (ImageButton)convertView.findViewById(R.id.deleteButton);
+
+        ImageView pictureView = (ImageView)convertView.findViewById(R.id.pictureView);
+        ImageView playImg = (ImageView)convertView.findViewById(R.id.play);
+        if(videoPaths.get(position).get_type().equals("picture")){
+            pictureView.setImageBitmap(BitmapFactory.decodeFile(videoPaths.get(position).get_data()));
+            pictureView.setVisibility(View.VISIBLE);
+            imgPlay.setVisibility(View.GONE);
+            playImg.setImageResource(android.R.drawable.ic_menu_camera);
+        }else{
+            playImg.setImageResource(android.R.drawable.ic_menu_gallery);
+        }
+
         final String name = videoPaths.get(position).get_displayName();
+        sizeTv.setText(videoPaths.get(position).get_size());
         tv.setText(name);
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Date d = new Date(videoPaths.get(position).get_date());
 
         dateTv.setText("  "+d.toLocaleString());
 
-        convertView.setOnClickListener(new View.OnClickListener() {
+        imgPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mCtx, Historic_viewer.class);

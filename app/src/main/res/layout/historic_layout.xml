@@ -9,6 +9,8 @@
 <LinearLayout
     android:orientation="vertical"
     android:layout_width="fill_parent"
+    android:paddingLeft="3dp"
+    android:paddingRight="3dp"
     android:background="@drawable/bg_parent_rounded_corner"
     android:layout_height="fill_parent">
     <TextView
@@ -63,23 +65,37 @@
         </LinearLayout>
     </LinearLayout>
     </LinearLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/pictureView"
+        android:visibility="gone"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="5dp"
         android:orientation="horizontal">
-        <Button
+        <ImageButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableLeft="@android:drawable/ic_media_play"
+            android:src="@android:drawable/ic_media_play"
             android:background="@drawable/bottom_button_selector"
             android:id="@+id/playButton"/>
-        <Button
+        <ImageButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableRight="@android:drawable/ic_delete"
-            android:background="@drawable/bottom_button_selector"/>
+            android:background="@drawable/bottom_button_selector"
+            android:src="@android:drawable/ic_menu_share"
+            android:id="@+id/shareButton"/>
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@android:drawable/ic_delete"
+            android:background="@drawable/bottom_button_selector"
+            android:id="@+id/deleteButton"/>
         </LinearLayout>
 
 </LinearLayout>
