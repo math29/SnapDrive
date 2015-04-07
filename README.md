@@ -1,4 +1,5 @@
 # SnapDrive
+![Promo](https://raw.githubusercontent.com/math29/SnapDrive/master/SnapDrive-logo.png)
 Application Android d'assistance à l'utilisation de portable au volant (et pas que !)
 
 ## Présentation
