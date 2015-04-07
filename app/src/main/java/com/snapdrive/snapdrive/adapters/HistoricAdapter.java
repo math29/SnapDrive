@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import com.snapdrive.snapdrive.Historic_viewer;
 import com.snapdrive.snapdrive.R;
 import com.snapdrive.snapdrive.SnapMedia;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -72,7 +74,7 @@ public class HistoricAdapter extends BaseAdapter{
 
         ImageButton imgPlay = (ImageButton)convertView.findViewById(R.id.playButton);
         ImageButton imgShare = (ImageButton)convertView.findViewById(R.id.shareButton);
-        ImageButton imgDelete = (ImageButton)convertView.findViewById(R.id.deleteButton);
+        final ImageButton imgDelete = (ImageButton)convertView.findViewById(R.id.deleteButton);
 
         ImageView pictureView = (ImageView)convertView.findViewById(R.id.pictureView);
         ImageView playImg = (ImageView)convertView.findViewById(R.id.play);
@@ -100,6 +102,36 @@ public class HistoricAdapter extends BaseAdapter{
                 intent.putExtra("videofilename", videoPaths.get(position).get_data());
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mCtx.startActivity(intent);
+            }
+        });
+
+        imgShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                if(videoPaths.get(position).get_type().equals("picture")){
+                    intent.setType("image/*");
+                }else{
+                    intent.setType("video/mp4");
+                }
+
+                intent.putExtra(Intent.EXTRA_STREAM,Uri.fromFile(new File(videoPaths.get(position).get_data())));
+                intent.putExtra(android.content.Intent.EXTRA_TEXT, "Share it!");
+                mCtx.startActivity(intent);
+
+
+            }
+        });
+
+        imgDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                File f = new File(videoPaths.get(position).get_data());
+                f.delete();
+                videoPaths.remove(position);
+                notifyDataSetChanged();
             }
         });
         /*try {
