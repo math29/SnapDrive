@@ -26,5 +26,7 @@
 
     <string name="hist">Historique</string>
     <string name="action_back">Retour</string>
+    <string name="action_refresh">Actualiser</string>
+    <string name="date">Date:</string>
 
 </resources>

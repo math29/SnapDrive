@@ -5,7 +5,6 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.SurfaceView;
 import android.widget.VideoView;
 
@@ -34,8 +33,6 @@ public class Historic_viewer extends ActionBarActivity {
         mediaController.setAnchorView(videoView);
         videoView.setMediaController(mediaController);
         videoView.setVideoPath(filename);
-
         videoView.start();
-        Log.v("Checkpoint", "On vient la ????????????????????????");
     }
 }
