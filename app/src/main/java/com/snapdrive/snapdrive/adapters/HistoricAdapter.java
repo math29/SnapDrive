@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.media.session.MediaController;
 import android.provider.MediaStore;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -12,12 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import com.snapdrive.snapdrive.Historic_viewer;
 import com.snapdrive.snapdrive.R;
+import com.snapdrive.snapdrive.SnapMedia;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -27,7 +25,7 @@ import java.util.List;
  */
 public class HistoricAdapter extends BaseAdapter{
     Context mCtx;
-    Cursor videoPaths;
+    List<SnapMedia> videoPaths;
     SwipeRefreshLayout swipe;
     LayoutInflater inflater;
 
@@ -35,7 +33,7 @@ public class HistoricAdapter extends BaseAdapter{
         mCtx = context;
     }
 
-    public HistoricAdapter(Activity activity,Context context, Cursor videos, LayoutInflater inflate, SwipeRefreshLayout swipe) {
+    public HistoricAdapter(Activity activity,Context context, List<SnapMedia> videos, LayoutInflater inflate, SwipeRefreshLayout swipe) {
         videoPaths = videos;
         this.swipe = swipe;
         inflater = inflate;
@@ -44,12 +42,12 @@ public class HistoricAdapter extends BaseAdapter{
 
     @Override
     public int getCount() {
-        return videoPaths.getCount();
+        return videoPaths.size();
     }
 
     @Override
     public Object getItem(int location) {
-        return videoPaths.moveToPosition(location);
+        return videoPaths.get(location);
     }
 
     @Override
@@ -58,8 +56,7 @@ public class HistoricAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        videoPaths.moveToPosition(position);
+    public View getView(final int position, View convertView, ViewGroup parent) {
         if (inflater == null)
             inflater = (LayoutInflater) mCtx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null)
@@ -69,10 +66,10 @@ public class HistoricAdapter extends BaseAdapter{
         TextView tv = (TextView)convertView.findViewById(R.id.videoName);
         TextView dateTv = (TextView)convertView.findViewById(R.id.date);
 
-        final String name = videoPaths.getString(videoPaths.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME));
+        final String name = videoPaths.get(position).get_displayName();
         tv.setText(name);
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        Date d = new Date(Long.parseLong(videoPaths.getString(videoPaths.getColumnIndexOrThrow(MediaStore.Video.Media.DATE_TAKEN))));
+        Date d = new Date(videoPaths.get(position).get_date());
 
         dateTv.setText("  "+d.toLocaleString());
 
@@ -80,7 +77,7 @@ public class HistoricAdapter extends BaseAdapter{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mCtx, Historic_viewer.class);
-                intent.putExtra("videofilename", videoPaths.getString(videoPaths.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)));
+                intent.putExtra("videofilename", videoPaths.get(position).get_data());
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mCtx.startActivity(intent);
             }
@@ -105,7 +102,7 @@ public class HistoricAdapter extends BaseAdapter{
         return convertView;
     }
 
-    public void updateAdapter(Cursor items){
+    public void updateAdapter(List<SnapMedia> items){
         videoPaths = items;
         swipe.setRefreshing(false);
         notifyDataSetChanged();
