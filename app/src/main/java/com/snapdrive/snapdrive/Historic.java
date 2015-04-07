@@ -13,6 +13,9 @@ import android.widget.ListView;
 
 import com.snapdrive.snapdrive.adapters.HistoricAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Mathieu on 05/04/2015.
  */
@@ -25,11 +28,13 @@ public class Historic extends ActionBarActivity{
     Context context;
     HistoricAdapter hadapter;
     private SwipeRefreshLayout swipeLayout;
+    private List<SnapMedia> medias;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.historic);
+
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -37,9 +42,9 @@ public class Historic extends ActionBarActivity{
         context = getApplicationContext();
         swipeLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_container);
 
-
+        medias = new ArrayList<SnapMedia>();
         initCursor();
-        hadapter = new HistoricAdapter(this, getApplicationContext(),videocursor,null, swipeLayout);
+        hadapter = new HistoricAdapter(this, getApplicationContext(),medias,null, swipeLayout);
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -53,21 +58,44 @@ public class Historic extends ActionBarActivity{
 
 
     private void initCursor(){
+        medias = new ArrayList<SnapMedia>();
         System.gc();
         String[] proj = { MediaStore.MediaColumns.DATA,
-                MediaStore.Files.FileColumns.DATA,
                 MediaStore.Files.FileColumns.DISPLAY_NAME,
-                MediaStore.Files.FileColumns.SIZE};
+                MediaStore.Files.FileColumns.SIZE,
+                MediaStore.Files.FileColumns.DATE_MODIFIED};
         String selection=MediaStore.Files.FileColumns.DATA +" like?";
         String[] selectionArgs=new String[]{"%SnapDrive%"};
         videocursor = managedQuery(MediaStore.Files.getContentUri("external"),
                 proj, selection,selectionArgs, MediaStore.Files.FileColumns.DATE_MODIFIED + " DESC");
+        videocursor.moveToFirst();
+        while(!videocursor.isAfterLast()){
+            if(videocursor.getString(videocursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DISPLAY_NAME))!=null) {
+                if (videocursor.getString(videocursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DISPLAY_NAME)).indexOf(".jpg") != -1 ||
+                        videocursor.getString(videocursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DISPLAY_NAME)).indexOf(".mp4") != -1) {
+                    String displayName = videocursor.getString(videocursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DISPLAY_NAME));
+                    long date = videocursor.getLong(videocursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATE_MODIFIED));
+                    String size = videocursor.getString(videocursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.SIZE));
+                    String data = videocursor.getString(videocursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA));
+                    if (videocursor.getString(videocursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DISPLAY_NAME)).indexOf(".jpg") != -1) {
+                        SnapMedia m = new SnapMedia("picture", displayName, date, size, data);
+                        medias.add(m);
+                    } else {
+                        SnapMedia m = new SnapMedia("video", displayName, date, size, data);
+                        medias.add(m);
+                    }
+                } else {
+
+                }
+            }
+            videocursor.moveToNext();
+        }
     }
 
 
     private void refresh(){
         initCursor();
-        hadapter.updateAdapter(videocursor);
+        hadapter.updateAdapter(medias);
     }
 
     @Override
