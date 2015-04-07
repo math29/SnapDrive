@@ -152,7 +152,7 @@ public class TTSService extends Service implements TextToSpeech.OnInitListener{
 
     private void say(String str, String action) {
         HashMap<String, String> myHashAlarm = new HashMap<String, String>();
-        myHashAlarm.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_ALARM));
+        myHashAlarm.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_MUSIC));
         myHashAlarm.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, action);
         mTts.speak(str,
                 TextToSpeech.QUEUE_ADD,
